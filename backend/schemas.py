@@ -1,61 +1,75 @@
-from pydantic import BaseModel, Field
-from typing import Optional
+```python
 from datetime import datetime
+from typing import Optional
 
-class IncidentCreate(BaseModel):
-    title: str
-    description: str
+from pydantic import BaseModel, Field, validator
+
+
+class IncidentBase(BaseModel):
+    """Base model for incidents."""
+    title: str = Field(..., min_length=3, max_length=100)
+    description: str = Field(..., min_length=10)
     location: Optional[str] = None
-    status: Optional[str] = "open"
+    status: Optional[str] = Field("open", regex="^(open|closed|resolved)$", description="Status of the incident")
 
-class IncidentUpdate(BaseModel):
-    title: Optional[str] = None
-    description: Optional[str] = None
-    location: Optional[str] = None
-    status: Optional[str] = None
 
-class Incident(BaseModel):
+class IncidentCreate(IncidentBase):
+    """Model for creating new incidents."""
+    pass
+
+
+class IncidentUpdate(IncidentBase):
+    """Model for updating existing incidents."""
+    pass
+
+
+class Incident(IncidentBase):
+    """Model for incidents, including database ID and timestamps."""
     id: int
-    title: str
-    description: str
-    location: Optional[str] = None
-    status: str
     created_at: datetime
     updated_at: datetime
 
     class Config:
         orm_mode = True
 
-class ResourceCreate(BaseModel):
-    type: str
+
+class ResourceBase(BaseModel):
+    """Base model for resources."""
+    type: str = Field(..., min_length=2, max_length=50)
     name: Optional[str] = None
-    status: Optional[str] = "available"
+    status: Optional[str] = Field("available", regex="^(available|unavailable|deployed)$", description="Status of the resource")
     location: Optional[str] = None
 
-class ResourceUpdate(BaseModel):
-    type: Optional[str] = None
-    name: Optional[str] = None
-    status: Optional[str] = None
-    location: Optional[str] = None
 
-class Resource(BaseModel):
+class ResourceCreate(ResourceBase):
+    """Model for creating new resources."""
+    pass
+
+
+class ResourceUpdate(ResourceBase):
+    """Model for updating existing resources."""
+    pass
+
+
+class Resource(ResourceBase):
+    """Model for resources, including database ID and timestamps."""
     id: int
-    type: str
-    name: Optional[str] = None
-    status: str
-    location: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 
     class Config:
         orm_mode = True
+
 
 class CommunicationCreate(BaseModel):
-    incident_id: int
-    message: str
-    channel: str
+    """Model for creating new communication records."""
+    incident_id: int = Field(..., ge=1)
+    message: str = Field(..., min_length=1, max_length=500)
+    channel: str = Field(..., regex="^(email|sms|phone)$", description="Communication channel")
+
 
 class Communication(BaseModel):
+    """Model for communication records, including database ID and timestamps."""
     id: int
     incident_id: int
     message: str
@@ -65,3 +79,4 @@ class Communication(BaseModel):
 
     class Config:
         orm_mode = True
+```

@@ -1,40 +1,33 @@
-export interface ThemeColors {{
-  primary: ColorScale;
-  secondary: ColorScale;
-  neutral: ColorScale;
-  success: SemanticColor;
-  warning: SemanticColor;
-  error: SemanticColor;
-  info: SemanticColor;
-}}
+/**
+ * @file Theme definitions for the application.
+ */
 
-export interface ColorScale {{
-  50: string;
-  100: string;
-  200: string;
-  300: string;
-  400: string;
-  500: string;
-  600: string;
-  700: string;
-  800: string;
-  900: string;
-  950?: string;
-}}
+/**
+ * Represents a scale of colors.
+ */
+export interface ColorShades {
+  [key: string]: string;
+}
 
-export interface SemanticColor {{
+/**
+ * Represents semantic colors with specific shades.
+ */
+export interface SemanticColor {
   50: string;
   500: string;
   600: string;
-}}
+}
 
-export interface Typography {{
-  fontFamily: {{
+/**
+ * Defines the typography styles.
+ */
+export interface Typography {
+  fontFamily: {
     sans: string;
     serif: string;
     mono: string;
-  }};
-  fontSize: {{
+  };
+  fontSize: {
     xs: string;
     sm: string;
     base: string;
@@ -44,8 +37,8 @@ export interface Typography {{
     '3xl': string;
     '4xl': string;
     '5xl': string;
-  }};
-  fontWeight: {{
+  };
+  fontWeight: {
     thin: number;
     light: number;
     normal: number;
@@ -54,39 +47,28 @@ export interface Typography {{
     bold: number;
     extrabold: number;
     black: number;
-  }};
-  lineHeight: {{
+  } | number | string;
+  lineHeight: {
     none: number;
     tight: number;
     snug: number;
     normal: number;
     relaxed: number;
     loose: number;
-  }};
-}}
+  };
+}
 
-export interface Spacing {{
-  0: string;
-  px: string;
-  0.5: string;
-  1: string;
-  1.5: string;
-  2: string;
-  2.5: string;
-  3: string;
-  3.5: string;
-  4: string;
-  5: string;
-  6: string;
-  7: string;
-  8: string;
-  10: string;
-  12: string;
-  16: string;
-  20: string;
-}}
+/**
+ * Defines spacing values.
+ */
+export interface Spacing {
+  [key: number | string]: string;
+}
 
-export interface BorderRadius {{
+/**
+ * Defines border radius values.
+ */
+export interface BorderRadius {
   none: string;
   sm: string;
   base: string;
@@ -96,9 +78,12 @@ export interface BorderRadius {{
   '2xl': string;
   '3xl': string;
   full: string;
-}}
+}
 
-export interface Shadows {{
+/**
+ * Defines shadow styles.
+ */
+export interface Shadows {
   xs: string;
   sm: string;
   base: string;
@@ -106,22 +91,33 @@ export interface Shadows {{
   xl: string;
   '2xl': string;
   inner: string;
-}}
+}
 
-export interface Theme {{
-  colors: ThemeColors;
+/**
+ * Defines the application theme.
+ */
+export interface Theme {
+  colors: {
+    primary: ColorShades;
+    secondary: ColorShades;
+    neutral: ColorShades;
+    success: SemanticColor;
+    warning: SemanticColor;
+    error: SemanticColor;
+    info: SemanticColor;
+  };
   typography: Typography;
   spacing: Spacing;
   borderRadius: BorderRadius;
   shadows: Shadows;
-  breakpoints: {{
+  breakpoints: {
     sm: string;
     md: string;
     lg: string;
     xl: string;
     '2xl': string;
-  }};
-  transitions: {{
+  };
+  transitions: {
     none: string;
     all: string;
     default: string;
@@ -129,8 +125,8 @@ export interface Theme {{
     opacity: string;
     shadow: string;
     transform: string;
-  }};
-  zIndex: {{
+  };
+  zIndex: {
     0: number;
     10: number;
     20: number;
@@ -138,15 +134,21 @@ export interface Theme {{
     40: number;
     50: number;
     auto: string;
-  }};
-}}
+  };
+}
 
+/**
+ * Theme mode options.
+ */
 export type ThemeMode = 'light' | 'dark' | 'system';
 
-export interface ThemeContextValue {{
+/**
+ * Context value for theme management.
+ */
+export interface ThemeContextValue {
   theme: Theme;
   mode: ThemeMode;
   setMode: (mode: ThemeMode) => void;
   toggleMode: () => void;
   isDark: boolean;
-}}
+}
